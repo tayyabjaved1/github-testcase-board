@@ -1,0 +1,90 @@
+{
+  "_comment": [
+    "Config for setup-tc-board.py. Copy this, edit the Module options to your",
+    "own product areas, and leave the rest alone unless you have a reason.",
+    "",
+    "Status, Priority, Automation Status and Role are deliberately NOT",
+    "domain-specific -- they are what the maintenance pipeline and the review",
+    "digest read. Module is the only field you are expected to rewrite.",
+    "",
+    "Colours are cosmetic except where noted below."
+  ],
+
+  "title": "Test Case Management",
+
+  "fields": [
+    {
+      "name": "Status",
+      "_why": [
+        "The keystone. The two '(Under Review)' states let automation PROPOSE a",
+        "change without asserting it is correct: the agent may set those, and",
+        "only a person promotes to Approved or Deprecated.",
+        "Remove them and there is no safe way to run the pipeline unattended,",
+        "and nothing for the review digest to report."
+      ],
+      "options": [
+        { "name": "Draft", "color": "GRAY", "description": "New, not yet reviewed" },
+        { "name": "Approved", "color": "GREEN", "description": "Reviewed and current — human-set only" },
+        { "name": "Deprecated", "color": "RED", "description": "Retired — human-set only" },
+        { "name": "Updated (Under Review)", "color": "YELLOW", "description": "Automation changed it; awaiting a human" },
+        { "name": "Deprecated (Under Review)", "color": "ORANGE", "description": "Automation proposes retiring it; awaiting a human" },
+        { "name": "Duplicate", "color": "PURPLE", "description": "Covered by another case" },
+        { "name": "Bug", "color": "PINK", "description": "The case documents a defect, not intended behaviour" }
+      ]
+    },
+    {
+      "name": "Module",
+      "_why": [
+        "The ONE field to rewrite for your product.",
+        "Name options '<Category> — <Module>'. The prefix is load-bearing: the",
+        "duplicate check scans a whole category by it, and the digest groups by",
+        "it. Pick a convention and hold it."
+      ],
+      "options": [
+        { "name": "Auth — Authentication", "color": "BLUE", "description": "Sign-in, sessions, password reset" },
+        { "name": "Auth — Onboarding", "color": "BLUE", "description": "First-run and account setup" },
+        { "name": "Billing — Subscriptions", "color": "GREEN", "description": "Plans, renewals, cancellation" },
+        { "name": "Billing — Invoices", "color": "GREEN", "description": "Invoice generation and delivery" },
+        { "name": "Admin — Settings", "color": "ORANGE", "description": "Tenant and workspace configuration" }
+      ]
+    },
+    {
+      "name": "Priority",
+      "_why": "Drives which cases are automated first and which run in a smoke pass.",
+      "options": [
+        { "name": "P0-Smoke", "color": "RED", "description": "Must pass before any release" },
+        { "name": "P1-Regression", "color": "ORANGE", "description": "Core regression suite" },
+        { "name": "P2-Extended", "color": "GRAY", "description": "Edge cases and deep coverage" }
+      ]
+    },
+    {
+      "name": "Automation Status",
+      "_why": [
+        "The seam between this catalogue and your automated suite.",
+        "'Needs Review' is set automatically when an AUTOMATED case changes,",
+        "meaning its spec probably no longer matches. Those items are the",
+        "backlog where QE and automation actually meet."
+      ],
+      "options": [
+        { "name": "Not Automated", "color": "GRAY", "description": "Manual only" },
+        { "name": "Automated", "color": "GREEN", "description": "Covered by an automated test" },
+        { "name": "Needs Review", "color": "YELLOW", "description": "Case changed; the automated test may now be wrong" },
+        { "name": "Blocked", "color": "RED", "description": "Cannot be automated yet" }
+      ]
+    },
+    {
+      "name": "Role",
+      "_why": "Who performs the case. Rewrite to your product's actor types.",
+      "options": [
+        { "name": "Admin", "color": "PURPLE", "description": "Tenant administrator" },
+        { "name": "Member", "color": "BLUE", "description": "Standard user" },
+        { "name": "Guest", "color": "GRAY", "description": "Unauthenticated or limited access" }
+      ]
+    },
+    {
+      "name": "Review Notes",
+      "type": "TEXT",
+      "_why": "Reviewer-owned. The maintenance agent is told never to read or write it."
+    }
+  ]
+}
